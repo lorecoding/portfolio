@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Fotografico</title>
+    <style>
+        /* Reset e stili base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar personalizzata */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #e63946, #457b9d);
+            border-radius: 4px;
+        }
+
+        /* Tipografia */
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            background: linear-gradient(45deg, #e63946, #457b9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-decoration: none;
+            mix-blend-mode: difference;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, #e63946, #457b9d);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1200/800') center/cover no-repeat;
+            filter: brightness(0.4) contrast(1.2);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .hero-text {
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeUp 1s forwards 0.5s;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: pulse 2s infinite 1s, fadeIn 1s forwards 1s;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(45deg);
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            padding: 10% 5%;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .section-header:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #e63946, #457b9d);
+            bottom: -1rem;
+            left: 0;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .portfolio-item:hover .portfolio-image {
+            transform: scale(1.05);
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+
+        .portfolio-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-tag {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        /* Grid item sizes */
+        .wide {
+            grid-column: span 6;
+        }
+
+        .tall {
+            grid-row: span 2;
+        }
+
+        .large {
+            grid-column: span 6;
+            grid-row: span 2;
+        }
+
+        .medium {
+            grid-column: span 4;
+        }
+
+        .small {
+            grid-column: span 3;
+        }
+
+        @media (max-width: 1024px) {
+            .wide, .large {
+                grid-column: span 6;
+            }
+            
+            .medium {
+                grid-column: span 6;
+            }
+            
+            .small {
+                grid-column: span 6;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wide, .large, .medium, .small {
+                grid-column: span 12;
+            }
+        }
+
+        /* About Section */
+        .about {
+            padding: 10% 5%;
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5%;
+        }
+
+        .about-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-image:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(230, 57, 70, 0.3), rgba(69, 123, 157, 0.3));
+            z-index: 1;
+            mix-blend-mode: multiply;
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #e63946, #457b9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 10% 5%;
+            position: relative;
+            background: radial-gradient(circle at center, #1a1a1a, #0a0a0a);
+        }
+
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .info-item {
+            margin-bottom: 2rem;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            color: #999;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(45deg, #e63946, #457b9d);
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #fff;
+            font-family: inherit;
+            resize: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: rgba(230, 57, 70, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #e63946, #457b9d);
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 5%;
+            text-align: center;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Animazioni */
+        @keyframes fadeUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Effetto parallax */
+        .parallax-section {
+            height: 50vh;
+            background: url('/api/placeholder/1200/600') center/cover fixed;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.2));
+        }
+
+        .parallax-content {
+            z-index: 1;
+            text-align: center;
+            padding: 0 10%;
+        }
+
+        .parallax-heading {
+            font-size: clamp(2rem, 8vw, 5rem);
+            margin-bottom: 1rem;
+        }
+
+        .parallax-text {
+            font-size: clamp(1rem, 1.5vw, 1.5rem);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">VISIONE</a>
+        <div class="nav-links">
+            <a href="#portfolio">Portfolio</a>
+            <a href="#about">Storia</a>
+            <a href="#contact">Contatti</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Catturare Momenti</h1>
+                <p>Un portfolio fotografico che racconta storie attraverso immagini uniche, catturando l'essenza dei momenti e trasformandoli in arte visiva duratura.</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="section-header">
+            <h2>Portfolio</h2>
+            <p>Una raccolta delle mie opere più significative che esplorano diversi temi e tecniche fotografiche.</p>
+        </div>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-item large">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Ritratto urbano" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Ritratto urbano</h3>
+                    <span class="portfolio-tag">Ritratto / Urbano</span>
+                </div>
+            </div>
+            <div class="portfolio-item medium">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Paesaggio montano" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Vette solitarie</h3>
+                    <span class="portfolio-tag">Paesaggio</span>
+                </div>
+            </div>
+            <div class="portfolio-item small">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Street photography" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Vie nascoste</h3>
+                    <span class="portfolio-tag">Street</span>
+                </div>
+            </div>
+            <div class="portfolio-item small tall">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Architettura" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Geometrie urbane</h3>
+                    <span class="portfolio-tag">Architettura</span>
+                </div>
+            </div>
+            <div class="portfolio-item medium">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Natura" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Foresta incantata</h3>
+                    <span class="portfolio-tag">Natura</span>
+                </div>
+            </div>
+            <div class="portfolio-item wide">
+                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Mare" class="portfolio-image">
+                <div class="portfolio-overlay">
+                    <h3 class="portfolio-title">Mari tempestosi</h3>
+                    <span class="portfolio-tag">Paesaggio marino</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Section -->
+    <section class="parallax-section">
+        <div class="parallax-overlay"></div>
+        <div class="parallax-content">
+            <h2 class="parallax-heading">La fotografia è poesia visiva</h2>
+            <p class="parallax-text">Ogni scatto è una storia che attende di essere raccontata, un momento che aspetta di essere ricordato.</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="about-content">
+            <div class="section-header">
+                <h2>La mia storia</h2>
+            </div>
+            <p>Fotografo da oltre 15 anni, la mia passione è nata durante un viaggio in Sudamerica dove ho scoperto il potere delle immagini nel raccontare storie umane e paesaggi mozzafiato.</p>
+            <p>Specializzato in fotografia di paesaggio e ritrattistica, cerco sempre di catturare l'autenticità e l'emozione del momento, creando immagini che parlano al cuore di chi le osserva.</p>
+            <p>Il mio approccio combina tecnica raffinata e sensibilità artistica, permettendomi di vedere oltre la superficie e cogliere l'essenza dei soggetti che fotografo.</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Anni di esperienza</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">120+</div>
+                    <div class="stat-label">Progetti completati</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">18</div>
+                    <div class="stat-label">Premi vinti</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-image">
+            <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Fotografo al lavoro">
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="section-header">
+            <h2>Contatti</h2>
+            <p>Sei interessato a collaborare o hai domande sul mio lavoro? Contattami per discutere del tuo progetto.</p>
+        </div>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">info@fotografoprofessionale.it</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Telefono</div>
+                    <div class="info-value">+39 123 456 7890</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Studio</div>
+                    <div class="info-value">Via dell'Arte 123, Milano</div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-500px"></i></a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name" class="form-label">Nome</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="form-label">Messaggio</label>
+                        <textarea id="message" class="form-textarea" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Invia messaggio</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">© 2025 VISIONE - Portfolio Fotografico. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        // Navbar effect on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.padding = '1rem 1.5rem';
+                navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+            } else {
+                navbar.style.padding = '1.5rem';
+                navbar.style.background = 'transparent';
+            }
+        });
+
+        // Simple parallax effect
+        window.addEventListener('scroll', function() {
+            const parallaxBg = document.querySelector('.hero-background');
+            const scrollPosition = window.pageYOffset;
+            parallaxBg.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+        });
+    </script>
+</body>
+</html>

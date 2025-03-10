@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Fotografico | Rettangoli Colorati</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Font imports */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@400;500;700&display=swap');
+        
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('/api/placeholder/1920/1080') center center fixed;
+            background-size: cover;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 20, 30, 0.8);
+            z-index: -1;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        .nav-toggle {
+            display: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            list-style: none;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        /* Colorful rectangle sections */
+        .rect-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .rect-section {
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            position: relative;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .rect-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rect-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+        
+        .rect-section:hover .rect-bg {
+            opacity: 0.9;
+        }
+        
+        .rect-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Home section */
+        .home-rect {
+            background-color: rgba(255, 87, 34, 0.7); /* Vibrant red-orange */
+        }
+        
+        .home-rect .rect-bg {
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.8), rgba(255, 193, 7, 0.8));
+        }
+        
+        /* Portfolio section */
+        .portfolio-rect {
+            background-color: rgba(33, 150, 243, 0.7); /* Vibrant blue */
+        }
+        
+        .portfolio-rect .rect-bg {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(0, 188, 212, 0.8));
+        }
+        
+        /* Bio section */
+        .bio-rect {
+            background-color: rgba(156, 39, 176, 0.7); /* Vibrant purple */
+        }
+        
+        .bio-rect .rect-bg {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.8), rgba(233, 30, 99, 0.8));
+        }
+        
+        /* Contact section */
+        .contact-rect {
+            background-color: rgba(76, 175, 80, 0.7); /* Vibrant green */
+        }
+        
+        .contact-rect .rect-bg {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(255, 235, 59, 0.8));
+        }
+        
+        /* Home specific styles */
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .cta-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Portfolio specific styles */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .portfolio-item {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+        
+        .portfolio-item:hover {
+            transform: scale(1.05);
+            z-index: 5;
+        }
+        
+        .portfolio-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s ease;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            transform: translateY(0);
+        }
+        
+        .portfolio-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .portfolio-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .portfolio-category {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Bio specific styles */
+        .bio-flex {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .bio-image {
+            flex: 0 0 40%;
+            position: relative;
+        }
+        
+        .bio-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        
+        .bio-image::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            z-index: -1;
+        }
+        
+        .bio-text {
+            flex: 1;
+        }
+        
+        /* Contact specific styles */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        textarea.form-input {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-button {
+            padding: 1rem 2rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+        
+        .form-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            margin-top: 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .bio-flex {
+                flex-direction: column;
+            }
+            
+            .bio-image {
+                flex: 0 0 100%;
+                margin-bottom: 2rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-toggle {
+                display: block;
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background-color: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                z-index: 1001;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .nav-toggle:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 250px;
+                height: 100vh;
+                background-color: rgba(20, 20, 30, 0.95);
+                flex-direction: column;
+                padding: 5rem 2rem 2rem;
+                transform: translateX(100%);
+                transition: transform 0.5s ease;
+                z-index: 1000;
+            }
+            
+            .nav-menu.active {
+                transform: translateX(0);
+            }
+            
+            .nav-link {
+                padding: 1rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        /* Reveal animation class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <button class="nav-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+            <li class="nav-item"><a href="#portfolio" class="nav-link">Portfolio</a></li>
+            <li class="nav-item"><a href="#bio" class="nav-link">Bio</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">Contatti</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container">
+            <div class="rect-container">
+                <div class="rect-section home-rect reveal">
+                    <div class="rect-bg"></div>
+                    <div class="rect-content">
+                        <div class="hero-content">
+                            <h1>Sofia Bianchi</h1>
+                            <p class="hero-subtitle">Fotografa artistica specializzata in ritratti contemporanei e paesaggi urbani</p>
+                            <a href="#portfolio" class="cta-button">Esplora il mio lavoro</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <div class="container">
+            <div class="rect-container">
+                <div class="rect-section portfolio-rect reveal">
+                    <div class="rect-bg"></div>
+                    <div class="rect-content">
+                        <h2>Portfolio</h2>
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Ritratto urbano">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Ritratto Urbano</h3>
+                                    <p class="portfolio-category">Ritratti</p>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Luci della città">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Luci della Città</h3>
+                                    <p class="portfolio-category">Paesaggi Urbani</p>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Contrasti naturali">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Contrasti Naturali</h3>
+                                    <p class="portfolio-category">Natura</p>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Architettura moderna">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Architettura Moderna</h3>
+                                    <p class="portfolio-category">Architettura</p>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Espressioni">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Espressioni</h3>
+                                    <p class="portfolio-category">Ritratti</p>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Astrazioni">
+                                <div class="portfolio-overlay">
+                                    <h3 class="portfolio-title">Astrazioni</h3>
+                                    <p class="portfolio-category">Arte Astratta</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bio Section -->
+    <section id="bio">
+        <div class="container">
+            <div class="rect-container">
+                <div class="rect-section bio-rect reveal">
+                    <div class="rect-bg"></div>
+                    <div class="rect-content">
+                        <h2>Chi Sono</h2>
+                        <div class="bio-flex">
+                            <div class="bio-image">
+                                <img src="https://fondazionecsc.b-cdn.net/wp-content/uploads/2019/11/fotografia.jpg" alt="Sofia Bianchi fotografa">
+                            </div>
+                            <div class="bio-text">
+                                <p>Ciao, sono Sofia Bianchi, fotografa con base a Milano. La mia passione per la fotografia è iniziata quando avevo solo 16 anni, quando mio padre mi regalò la mia prima macchina fotografica.</p>
+                                
+                                <p>Negli ultimi 12 anni, ho sviluppato un mio stile distintivo che combina elementi di fotografia contemporanea con influenze dalle arti visive classiche. Mi piace esplorare il contrasto tra l'urbanità moderna e l'intimità umana, catturando momenti di autenticità in ambienti artificiali.</p>
+                                
+                                <p>Il mio lavoro è stato esposto in diverse gallerie in Italia e all'estero, incluso il MoMA di New York e la Galleria d'Arte Moderna di Roma. Ho collaborato con brand internazionali come Vogue, Elle e National Geographic.</p>
+                                
+                                <p>Sono sempre alla ricerca di nuovi progetti stimolanti che mi permettano di esplorare nuove prospettive e raccontare storie significative attraverso le mie immagini.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="rect-container">
+                <div class="rect-section contact-rect reveal">
+                    <div class="rect-bg"></div>
+                    <div class="rect-content">
+                        <h2>Contattami</h2>
+                        <div class="contact-grid">
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Email</h3>
+                                        <p>info@sofiabianchi.it</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Telefono</h3>
+                                        <p>+39 123 456 7890</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Studio</h3>
+                                        <p>Via Tortona 27, 20144 Milano</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Orari</h3>
+                                        <p>Lun-Ven: 10:00 - 18:00</p>
+                                        <p>Weekend: su appuntamento</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <form class="contact-form">
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="Nome e Cognome" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-input" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-input" placeholder="Oggetto">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-input" placeholder="Il tuo messaggio" required></textarea>
+                                </div>
+                                <button type="submit" class="form-button">Invia Messaggio</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-behance"></i></a>
+            </div>
+            <p>© 2025 Sofia Bianchi Fotografia. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle navigation menu
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking a nav link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                
+                // Update active link
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+        
+        // Scroll reveal animation
+        function revealElements() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        // Activate current section in navigation
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                const scrollPosition = window.scrollY;
+                
+                if (scrollPosition >= sectionTop - 200 && scrollPosition < sectionTop + sectionHeight - 200) {
+                    const sectionId = section.getAttribute('id');
+                    
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Add scroll event listeners
+        window.addEventListener('scroll', revealElements);
+        window.addEventListener('scroll', updateActiveNavLink);
+        
+        // Initial check for visible elements
+        window.addEventListener('load', () => {
+            revealElements();
+            updateActiveNavLink();
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Siti Vetrina | Web Designer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #ff006e;
+      --accent-color: #8338ec;
+      --background-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background-color);
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: white;
+      padding: 80px 0 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+      background-size: 100% 100%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      opacity: 0.9;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Portfolio Section */
+    .portfolio {
+      padding: 80px 0;
+      position: relative;
+      margin-top: -50px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .portfolio-intro {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .site-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .site-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-preview {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-card:hover .card-preview {
+      background-position: center bottom;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+      color: white;
+      font-weight: 600;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .site-card:hover .preview-overlay {
+      opacity: 1;
+    }
+
+    .style-pizze {
+      background-image: url(pizza.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      transition: background-position 1.5s ease;
+    }
+    
+    .style-parru {
+      background: linear-gradient(135deg, #f3a6ed 0%, #e26fa5 99%, #fad0c4 100%);
+    }
+
+    .style-minimal {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .style-dark {
+      background-color: #212529;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .style-colorful {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+    }
+
+    .preview-text {
+      font-size: 1rem;
+      color: #6c757d;
+      text-align: center;
+      padding: 15px;
+      z-index: 1;
+    }
+
+    .style-dark .preview-text {
+      color: #e9ecef;
+    }
+
+    .style-pizze .preview-text,
+    .style-parru .preview-text {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--primary-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .card-content {
+      padding: 25px;
+    }
+
+    .site-title {
+      font-size: 1.4rem;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .site-description {
+      font-size: 1rem;
+      color: #6c757d;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .card-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .feature-tag {
+      background-color: #f0f4f8;
+      color: #4a5568;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      transition: var(--transition);
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    /* Servizi Section */
+    .services {
+      padding: 80px 0;
+      background-color: #f1f5f9;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .service-card {
+      background: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .service-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: white;
+      font-size: 1.8rem;
+    }
+
+    .service-title {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .service-description {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .contact-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .contact p {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .social-link {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      font-size: 1.2rem;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px);
+      background-color: var(--accent-color);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #222;
+      color: #fff;
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    .footer-links {
+      margin: 20px 0;
+    }
+
+    .footer-links a {
+      color: #ddd;
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .copyright {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .sites-grid, .services-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #1a4b8e, #4c2a89);
+      }
+
+      .style-minimal {
+        background-color: #2d2d2d;
+        border: 1px solid #3d3d3d;
+      }
+
+      .site-title {
+        color: #eee;
+      }
+
+      .site-description, .portfolio-intro, .service-description {
+        color: #b0b0b0;
+      }
+
+      .feature-tag {
+        background-color: #2d3748;
+        color: #cbd5e0;
+      }
+
+      .services, .contact {
+        background-color: #1a1a1a;
+      }
+      
+      .service-card {
+        background-color: #1e1e1e;
+      }
+      
+      .contact p {
+        color: #b0b0b0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <span class="badge">Portfolio Siti Vetrina</span>
+      <h1>Siti Vetrina Professionali</h1>
+      <p>Creo siti vetrina eleganti e funzionali che presentano efficacemente la tua attività e attirano nuovi clienti</p>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section class="portfolio">
+    <div class="container">
+      <h2 class="section-title">I Miei Progetti</h2>
+      <p class="portfolio-intro">Esplora la mia raccolta di siti vetrina realizzati per attività di diversi settori. Ogni sito è progettato per valorizzare l'identità del brand e convertire i visitatori in clienti.</p>
+      
+      <div class="sites-grid">
+        <div class="site-card">
+          <div class="card-tag">Ristorazione</div>
+          <div class="card-preview style-pizze">
+         
+            <div class="preview-overlay">Design elegante per ristorante</div>
+          </div>
+          <div class="card-content">
+            <h2 class="site-title">Osteria del Mare</h2>
+            <p class="site-description">Sito vetrina per ristorante con menu interattivo, gallery e sistema di prenotazione.</p>
+            <div class="card-features">
+              <span class="feature-tag">One-page</span>
+              <span class="feature-tag">Responsive</span>
+              <span class="feature-tag">Prenotazioni</span>
+              <span class="feature-tag">Menu online</span>
+            </div>
+            <a href="https://osteriadelmare.web.app/" class="btn">Visita il sito</a>
+          </div>
+        </div>
+        
+        <div class="site-card">
+          <div class="card-tag">Beauty</div>
+          <div class="card-preview style-parru">
+           
+            <div class="preview-overlay">Design innovativo per salone</div>
+          </div>
+          <div class="card-content">
+            <h2 class="site-title">Flavia Hair Studio</h2>
+            <p class="site-description">Sito vetrina con layout innovativo per parrucchiera, ottimizzato per mostrare il portfolio di lavori.</p>
+            <div class="card-features">
+              <span class="feature-tag">Scroll orizzontale</span>
+              <span class="feature-tag">Gallery</span>
+              <span class="feature-tag">Prenotazioni</span>
+              <span class="feature-tag">Portfolio</span>
+            </div>
+            <a href="https://flaviasf20-2e601.web.app/" class="btn">Visita il sito</a>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="card-tag">Business</div>
+          <div class="card-preview style-minimal">
+            <p class="preview-text">Layout minimalista con spazi ampi e design essenziale</p>
+            <div class="preview-overlay">Design essenziale per professionisti</div>
+          </div>
+          <div class="card-content">
+            <h2 class="site-title">Stile Minimalista</h2>
+            <p class="site-description">Sito vetrina con design minimalista ideale per professionisti e studi che cercano un'immagine pulita e professionale.</p>
+            <div class="card-features">
+              <span class="feature-tag">Minimalista</span>
+              <span class="feature-tag">Elegante</span>
+              <span class="feature-tag">Multi-pagina</span>
+              <span class="feature-tag">Form contatti</span>
+            </div>
+            <a href="sito1.html" class="btn">Visita il sito</a>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="card-tag">Creative</div>
+          <div class="card-preview style-dark">
+            <p class="preview-text">Tema scuro con contrasti forti e dettagli sofisticati</p>
+            <div class="preview-overlay">Design dark per creativi</div>
+          </div>
+          <div class="card-content">
+            <h2 class="site-title">Stile Scuro</h2>
+            <p class="site-description">Sito vetrina con tema dark ideale per fotografi, designer e creativi che vogliono un impatto visivo forte.</p>
+            <div class="card-features">
+              <span class="feature-tag">Dark mode</span>
+              <span class="feature-tag">Portfolio</span>
+              <span class="feature-tag">Animazioni</span>
+              <span class="feature-tag">Gallery</span>
+            </div>
+            <a href="sito3.html" class="btn">Visita il sito</a>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="card-tag">Negozi</div>
+          <div class="card-preview style-colorful">
+            <p class="preview-text">Design vivace con palette di colori accattivante</p>
+            <div class="preview-overlay">Design colorato per retail</div>
+          </div>
+          <div class="card-content">
+            <h2 class="site-title">Stile Colorato</h2>
+            <p class="site-description">Sito vetrina vibrante e accattivante, perfetto per negozi, boutique e attività che vogliono trasmettere energia.</p>
+            <div class="card-features">
+              <span class="feature-tag">Colorato</span>
+              <span class="feature-tag">Prodotti</span>
+              <span class="feature-tag">Contatti</span>
+              <span class="feature-tag">Mobile-first</span>
+            </div>
+            <a href="sito2.html" class="btn">Visita il sito</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servizi Section -->
+  <section class="services">
+    <div class="container">
+      <h2 class="section-title">I Miei Servizi</h2>
+      <p class="portfolio-intro">Realizzo siti vetrina completi e personalizzati per far risaltare la tua attività online</p>
+      
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h3 class="service-title">Design Personalizzato</h3>
+          <p class="service-description">Creo siti vetrina unici e su misura che riflettono l'identità del tuo brand e si distinguono dalla concorrenza.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3 class="service-title">Responsive Design</h3>
+          <p class="service-description">Tutti i miei siti vetrina sono ottimizzati per funzionare perfettamente su qualsiasi dispositivo, da desktop a smartphone.</p>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-tachometer-alt"></i>
+          </div>
+          <h3 class="service-title">Ottimizzazione SEO</h3>
+          <p class="service-description">Miglioro la visibilità del tuo sito sui motori di ricerca per aiutarti a raggiungere più clienti potenziali.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact">
+    <div class="container contact-content">
+      <h2>Hai bisogno di un sito vetrina?</h2>
+      <p>Contattami per discutere del tuo progetto. Realizzerò un sito vetrina professionale che rappresenta al meglio la tua attività.</p>
+      <a href="mailto:it.lorenzo@outlook.it" class="btn">Richiedi un preventivo</a>
+      
+      <div class="social-links">
+        <a href="https://www.facebook.com/ascione.lorenzo/" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.linkedin.com/in/lorenzo-ascione/" class="social-link"><i class="fab fa-facebook"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <div class="footer-logo">Siti Vetrina Professionali</div>
+      <div class="footer-links">
+        <a href="#">Home</a>
+        <a href="#">Portfolio</a>
+        <a href="#">Servizi</a>
+        <a href="#">Preventivo</a>
+        <a href="#">Contatti</a>
+      </div>
+      <p class="copyright">&copy; 2025 - Tutti i diritti riservati</p>
+    </div>
+  </footer>
+</body>
+</html>
